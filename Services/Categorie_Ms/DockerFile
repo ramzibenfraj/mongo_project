@@ -1,0 +1,26 @@
+# Dockerfile for Category (Flask)
+
+# Étape 1: Utiliser une image Python de base
+FROM python:3.9
+
+# Étape 2: Créer un répertoire pour l'application
+WORKDIR /usr/src/app
+
+# Étape 3: Copier le requirements.txt et installer les dépendances
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Étape 4: Copier le reste de l'application
+COPY . .
+
+# Étape 5: Définir la variable d'environnement (tu peux aussi les placer dans un fichier .env)
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
+ENV FRONTEND_URL=http://localhost:3000
+ENV CATEGORY_SERVICE_URL=http://localhost:3002
+
+# Étape 6: Exposer le port
+EXPOSE 5001
+
+# Étape 7: Lancer l'application
+CMD ["flask", "run", "--host=0.0.0.0", "--port=3002"]
