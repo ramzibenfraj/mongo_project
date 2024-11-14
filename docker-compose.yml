@@ -6,27 +6,27 @@ services:
     image: rbenfraj46/front_react_shop:latest
     environment:
       - REACT_APP_VERSION=2.0
-      - REACT_APP_API_URL=http://gateway:3001  # Use gateway service name for internal communication
+      - REACT_APP_API_URL=http://gateway:3001  
     ports:
       - "3000:80"
     networks:
-      - app-network  # Custom network for internal communication
+      - app-network  
 
   # API Gateway service (Node.js)
   gateway:
     image: rbenfraj46/gateway:latest
     environment:
       - PORT=3001
-      - USER_SERVICE_URL=http://categoriems:3002  # Service name for category microservice
-      - PRODUIT_SERVICE_URL=http://productms:3003  # Service name for produit microservice
+      - USER_SERVICE_URL=http://categoriems:3002  
+      - PRODUIT_SERVICE_URL=http://productms:3003  
     depends_on:
-      - categoriems  # Ensure this starts after categoriems
-      - productms  # Ensure this starts after ms_produit
-      - mongodb  # Ensure MongoDB is available
+      - categoriems  
+      - productms  
+      - mongodb  
     ports:
       - "3001:3001"
     networks:
-      - app-network  # Custom network for internal communication
+      - app-network  
 
   # Category Microservice (Flask)
   categoriems:
@@ -34,15 +34,15 @@ services:
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=production
-      - FRONTEND_URL=http://frontend:3000  # Use frontend service name
-      - CATEGORY_SERVICE_URL=http://categoriems:3002  # Internal service URL for category microservice
-      - MONGO_URI=mongodb://mongodb:27017/categoridb  # MongoDB connection string with service name
+      - FRONTEND_URL=http://frontend:3000  
+      - CATEGORY_SERVICE_URL=http://categoriems:3002  
+      - MONGO_URI=mongodb://mongodb:27017/categoridb 
     depends_on:
       - mongodb  
     ports:
       - "3002:3002"
     networks:
-      - app-network  # Custom network for internal communication
+      - app-network  
 
   # Product Microservice (Flask)
   productms:
@@ -50,14 +50,14 @@ services:
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=production
-      - FRONTEND_URL=http://frontend:3000  # Use frontend service name
-      - MONGO_URI=mongodb://mongodb:27017/produitdb  # MongoDB connection string with service name
+      - FRONTEND_URL=http://frontend:3000  
+      - MONGO_URI=mongodb://mongodb:27017/produitdb  
     depends_on:
       - mongodb  
     ports:
       - "3003:3003"
     networks:
-      - app-network  # Custom network for internal communication
+      - app-network 
 
   # MongoDB service
   mongodb:
@@ -65,8 +65,7 @@ services:
     ports:
       - "27017:27017"
     networks:
-      - app-network  # Custom network for internal communication
-
+      - app-network  
 networks:
-  app-network:  # Define a custom network for inter-service communication
-    driver: bridge  # Use Docker's bridge network
+  app-network:  
+    driver: bridge  
