@@ -6,11 +6,10 @@ from routes.category import category_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
 # Enable CORS
-CORS(app, origins=[Config.FRONTEND_URL , Config.PRODUCT_SERVICE_URL], supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 app.register_blueprint(category_bp)
-
 if __name__ == "__main__":
-    app.run(port=Config.PORT, debug=True)
+    app.run(host="0.0.0.0", port=Config.PORT, debug=True)
+

@@ -22,11 +22,14 @@ class ProductListView extends Component {
 
   async componentDidMount() {
     try {
+      console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/produit/getproduits`
+        
       );
       const products = response.data;
       //console.log("Type of products:", typeof products);
+      console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
 
       const firstKey = Object.keys(products)[0];
       const firstKeyValue = products[firstKey];

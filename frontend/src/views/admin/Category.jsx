@@ -18,6 +18,9 @@ class CategoryListView extends Component {
   async componentDidMount() {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/categories/getallcategories`);
+      console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
+      console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
+
       const categories = response.data;
       console.log(categories)
       const totalItems = categories.length;

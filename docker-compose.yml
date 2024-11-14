@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  # Frontend service (React)
+  frontend:
+    image: rbenfraj46/front_react_shop:latest
+    environment:
+      - REACT_APP_VERSION=2.0
+      - REACT_APP_API_URL=http://gateway:3001  # Use gateway service name for internal communication
+    ports:
+      - "3000:80"
+    networks:
+      - app-network  # Custom network for internal communication
+
+  # API Gateway service (Node.js)
+  gateway:
+    image: rbenfraj46/gateway:latest
+    environment:
+      - PORT=3001
+      - USER_SERVICE_URL=http://categoriems:3002  # Service name for category microservice
+      - PRODUIT_SERVICE_URL=http://productms:3003  # Service name for produit microservice
+    depends_on:
+      - categoriems  # Ensure this starts after categoriems
+      - productms  # Ensure this starts after ms_produit
+      - mongodb  # Ensure MongoDB is available
+    ports:
+      - "3001:3001"
+    networks:
+      - app-network  # Custom network for internal communication
+
+  # Category Microservice (Flask)
+  categoriems:
+    image: rbenfraj46/ms_category:latest
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+      - FRONTEND_URL=http://frontend:3000  # Use frontend service name
+      - CATEGORY_SERVICE_URL=http://categoriems:3002  # Internal service URL for category microservice
+      - MONGO_URI=mongodb://mongodb:27017/categoridb  # MongoDB connection string with service name
+    depends_on:
+      - mongodb  
+    ports:
+      - "3002:3002"
+    networks:
+      - app-network  # Custom network for internal communication
+
+  # Product Microservice (Flask)
+  productms:
+    image: rbenfraj46/ms_produit:latest
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+      - FRONTEND_URL=http://frontend:3000  # Use frontend service name
+      - MONGO_URI=mongodb://mongodb:27017/produitdb  # MongoDB connection string with service name
+    depends_on:
+      - mongodb  
+    ports:
+      - "3003:3003"
+    networks:
+      - app-network  # Custom network for internal communication
+
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network  # Custom network for internal communication
+
+networks:
+  app-network:  # Define a custom network for inter-service communication
+    driver: bridge  # Use Docker's bridge network

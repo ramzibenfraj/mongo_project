@@ -8,10 +8,10 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # Enable CORS
-CORS(app, origins=[Config.FRONTEND_URL , Config.PRODUCT_SERVICE_URL], supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # Register blueprints
 app.register_blueprint(product_bp)
 
 if __name__ == "__main__":
-    app.run(port=Config.PORT, debug=False)
+    app.run(host="0.0.0.0", port=3003, debug=True)
