@@ -17,8 +17,6 @@ COPY . .
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 ENV FRONTEND_URL=http://frontend:3000
-ENV PRODUCT_SERVICE_URL=http://ms_produit:3003
-ENV CATEGORY_SERVICE_URL=http://categoriems:3002
 ENV MONGO_URI=mongodb://mongodb:27017/produitdb
 
 # Step 6: Expose the required port
