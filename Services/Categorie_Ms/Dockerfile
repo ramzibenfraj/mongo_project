@@ -18,7 +18,6 @@ COPY . .
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 ENV FRONTEND_URL=http://frontend:3000
-ENV CATEGORY_SERVICE_URL=http://categoriems:3002
 
 # Expose the port
 EXPOSE 3002
