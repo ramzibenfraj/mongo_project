@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  # Frontend service (React)
+
   frontend:
     image: rbenfraj46/front_react_shop:latest
     environment:
@@ -12,7 +12,7 @@ services:
     networks:
       - app-network  
 
-  # API Gateway service (Node.js)
+
   gateway:
     image: rbenfraj46/gateway:latest
     environment:
@@ -28,14 +28,13 @@ services:
     networks:
       - app-network  
 
-  # Category Microservice (Flask)
+
   categoriems:
     image: rbenfraj46/ms_category:latest
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=production
       - FRONTEND_URL=http://frontend:3000  
-      - CATEGORY_SERVICE_URL=http://categoriems:3002  
       - MONGO_URI=mongodb://mongodb:27017/categoridb 
     depends_on:
       - mongodb  
@@ -62,10 +61,16 @@ services:
   # MongoDB service
   mongodb:
     image: mongo:latest
+    volumes:
+      - mongo-data:/data/db 
     ports:
       - "27017:27017"
     networks:
       - app-network  
+
 networks:
   app-network:  
     driver: bridge  
+
+volumes:
+  mongo-data: 
